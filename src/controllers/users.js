@@ -52,7 +52,7 @@ async function getUserById (req, res) {
          const accessToken = jwt.sign(JSON.stringify(user), process.env.ACCESS_TOKEN_SECRET)
          res.json({ accessToken: accessToken })
        } else {
-         res.json({ response: 'Login not possible' })
+         res.json({ response: 'User not authorized' })
        }
     } catch (err) {
        res.status(500)
