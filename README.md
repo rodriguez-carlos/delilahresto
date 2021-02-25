@@ -2,7 +2,9 @@
 ### Getting started
 
 1. From the project root, run `npm install`. After installing dependencies, run `npm run devStart`. 
-2. If mysql environment is up and running, run  mysql --user="yourusername" --database="delila_db_carlosDWFS" --password="yourpassword" < "/delila_db.sql". Otherwise, client may download file "delila_db.sql" from the project root and import it directly into phpmyadmin. Connection will be executed from file "db-connection.js" where client may adjust path to connect to their own phpmyadmin environment. 
+2. If mysql environment is up and running and you have mysql client installed, run  `mysql --user="yourusername" --database="delila_db_carlosDWFS" --password="yourpassword" < "/delilah_db.sql"` from a command line.
+
+Otherwise, user may download file "delilah_db.sql" from the project root and import it directly into phpmyadmin or other mysql GUI. Connection is configured in file "db-config.js", where user may adjust the values to connect to their own mysql server. 
 
 ### Requirements
 
