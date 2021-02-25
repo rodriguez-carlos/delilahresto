@@ -1,7 +1,8 @@
 # Delila Restó API
 ### Getting started
 
-From the project root, run `npm install`. After installing dependencies, run `npm run devStart`. Database structure will be created by Sequelize. Refer to YAML documentation for further information.
+1. From the project root, run `npm install`. After installing dependencies, run `npm run devStart`. 
+2. Run  mysql --user="yourusername" --database="delila_db" --password="yourpassword" < "/delila_db.sql". Database structure will be created by Sequelize. Refer to YAML documentation for further information.
 
 ### Requirements
 
