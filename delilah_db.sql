@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-02-2021 a las 14:24:43
+-- Tiempo de generación: 25-02-2021 a las 15:37:09
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.4.9
 
@@ -18,9 +18,19 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `delilah_db`
+-- Base de datos: `delilah_db_carlosDWFS`
 --
-COMMIT;
+
+-- --------------------------------------------------------
+
+--
+-- Creación de base de datos
+--
+
+
+CREATE DATABASE delilah_db_carlosDWFS;
+USE delilah_db_carlosDWFS;
+
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
