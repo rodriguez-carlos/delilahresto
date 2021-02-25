@@ -17,7 +17,7 @@ const UsersModel = {
         unique: true
     },
     phone_user: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true
     },

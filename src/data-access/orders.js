@@ -2,9 +2,9 @@ const { Orders, OrderProducts } = require('../../db-connection')
 const { retrieveProductById } = require('../data-access/products')
 const { retrieveUserById } = require('./users')
 
-const saveOrder = async (data) => {
+const saveOrder = async (data, userId) => {
     try {
-        const newOrder = await Orders.create(data)
+        const newOrder = await Orders.create(data, userId)
         const products = data.products
         const idOrder = newOrder.id
         products.forEach((product) => OrderProducts.create( { id_product: product.id_product, id_order: idOrder, quantity: product.quantity } ) )

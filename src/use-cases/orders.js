@@ -1,10 +1,11 @@
 const { saveOrder, retrieveAllOrders, retrieveProductsFromOrder, retrieveOrderById, updateOrderStatus } = require('../data-access/orders')
 const { retrieveProductById } = require('../data-access/products')
 
-async function addOrder (data) {
+async function addOrder (data, userId) {
     try {
         data.total_order = await totalizeOrder(data)
-        const result = await saveOrder(data)
+        data.id_user = userId
+        const result = await saveOrder(data, userId)
         return result
     } catch (err) {
         throw err

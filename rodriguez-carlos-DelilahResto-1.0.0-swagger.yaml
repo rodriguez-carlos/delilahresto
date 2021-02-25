@@ -1,0 +1,309 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/rodriguez-carlos/DelilahResto/1.0.0
+info:
+  description: This is a simple API
+  version: "1.0.0"
+  title: Delilah Restó API
+  contact:
+    email: carlosdanielrod@gmail.com
+
+paths:
+  /products:
+    summary: path for product operations
+    
+    post:
+      operationId: postProduct
+      summary: Creates a new product. Can only be done by an admin user
+      security: 
+      - BearerAuth: []
+      requestBody:
+        description: A JSON object containing product info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product'
+      responses:
+        '200':
+          description: Success!
+        '400':
+          description: User is not admin
+    
+    get:
+      operationId: getAllProducts
+      summary: Lists all products in DB. Must be logged in to access
+      security: 
+      - BearerAuth: []
+      responses:
+        '200':
+          description: List of all products
+        '400':
+          description: Forbidden. Log in to gain access
+      
+  /products/{productId}/:
+    get:
+      operationId: getProductById
+      summary: Reads a product from its id. Id must be provided in path. Must be logged in to access
+      security: 
+      - BearerAuth: []
+      parameters:
+      - in: path
+        name: productId
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: Retrieved product
+        '400':
+          description: Forbidden. Log in to gain access
+          
+    patch:
+      operationId: patchProduct
+      summary: Updates info on a product. Id must be provided in path. Can only be done by an admin user
+      security: 
+      - BearerAuth: []
+      requestBody:
+        description: A JSON object containing product info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/product'
+      parameters:
+      - in: path
+        name: productId
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: Success!
+        '400':
+          description: Forbidden. Log in as admin to gain access
+          
+    delete:
+      operationId: deleteProduct
+      summary: Deletes a product whole. Id must be provided in path. Can only be done by an admin user
+      security: 
+      - BearerAuth: []
+      parameters:
+      - in: path
+        name: productId
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: Success!
+        '400':
+          description: Forbidden. Log in as admin to gain access
+      
+  /users:
+    post:
+      operationId: postUser
+      summary: Creates a new user. User id is generated automatically.
+      requestBody:
+        description: A JSON object containing new user info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+      responses:
+        '200':
+          description: User created
+        '400':
+          description: An error occurred
+  
+  /users/{userId}/:
+    get:
+      operationId: getUserById
+      summary: Retrieves an user by its id. Id must be provided in path. Admins can retrive any user, but non admins can only retrieve their own by providing their corresponding id.
+      security: 
+      - BearerAuth: []
+      parameters:
+      - in: path
+        name: userId
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: Success!
+        '400':
+          description: User is not admin
+      
+    delete:
+      operationId: deleteUser
+      summary: Deletes a user whole. Id must be provided in path. Can only be done by an admin user.
+      security: 
+      - BearerAuth: []
+      parameters:
+      - in: path
+        name: userId
+        schema:
+          type: integer
+        required: true
+      responses:
+        '200':
+          description: Success!
+        '400':
+          description: User is not admin
+    
+  /users/login/:
+    post:
+      operationId: login
+      summary: This endpoint logs the user, creating a jsonwebtoken token. Receives an object with the email and password associated with user account.
+      requestBody:
+        description: A JSON object containing email and password. 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email_user:          
+                  type: string
+                password_user:
+                  type: integer
+              required:
+                - email_user
+                - password_user
+      responses:
+        '200':
+          description: Access Token
+        '500':
+          description: User not authorized
+  
+  /orders:
+    post:
+      operationId: postOrder
+      summary: Creates a new order with a default status_order value of 'new'. User most be logged in to operate. orderId will be automatically generated
+      requestBody:
+        description: A JSON object containing order information. 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payment_method_order: 
+                  type: string
+                products:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      product_id:
+                        type: integer
+                      quantity:
+                        type: integer
+              required:
+              - payment_method_order
+              - products
+      responses:
+        '200':
+          description: Returns the order with its data
+        '400':
+          description: Forbidden
+    get:
+      operationId: getAllOrders
+      summary: Retrieves all the orders that are authorized for the logged user. Admins see all orders, non admins only see their own orders. The info is displayed with products, user name, user address, and more.
+      security: 
+      - BearerAuth: []
+      responses:
+        '200':
+          description: Returns all authorized orders
+        '400':
+          description: User is not an admin
+          
+    patch:
+      operationId: patchOrderStatus
+      summary: Only admins can use this operation to update the status of an order. The status_order and the id_order must be provided in a JSON object.
+      security: 
+      - BearerAuth: [admin]
+      requestBody:
+        description: A JSON object containing order information. 
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: 
+                status_order:
+                  type: string
+                id_order:
+                  type: integer
+      responses:
+        '200':
+          description: Returns the new status of the order
+        '400': 
+          description: User is not an admin
+          
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    product:
+      type: object
+      required:
+        - id
+        - name_product
+        - price_product
+      properties:
+        id:
+          type: integer
+        name_product:
+          type: string
+          example: Milkshake
+        price_product:
+          type: integer
+          example: 9
+
+    user:
+      type: object
+      required:
+        - id
+        - name_user
+        - email_user
+        - phone_user
+        - address_user
+        - password_user
+      properties:
+        id:
+          type: integer
+        name_user:
+          type: string
+        phone:
+          type: string
+          example: 408-867-5309
+    
+    order:
+      type: object
+      required: 
+        - id
+        - payment_method_order
+        - id_user
+      properties:
+        id:
+          type: integer
+        time_order: 
+          type: string
+        status_order:
+          type: string
+          default: 'new'
+          enum: [new, confirmed, processing, on delivery, cancelled, delivered]
+        payment_method_order:
+          type: string
+          enum: [cash, card upon delivery, card online]
+        total_order:
+          type: integer
+        id_user:
+          $ref: /components/schemas/user/id
+        
+    orderProducts:
+      properties:
+        id_product:
+          $ref: /components/schemas/product/id
+        id_order:
+          $ref: /components/schemas/order/id
