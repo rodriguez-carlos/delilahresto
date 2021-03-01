@@ -88,4 +88,15 @@ const updateOrderStatus = async (newStatus, orderId) => {
     }
 }
 
-module.exports = { saveOrder, retrieveAllOrders, retrieveProductsFromOrder, retrieveOrderById, updateOrderStatus }
+const destroyOrder = async (orderId) => {
+    try {
+        await OrderProducts.destroy( { where: { id_order: orderId }})
+        const deletedOrder = await Orders.destroy( { where: { id: orderId} } )
+        console.log("deletedOrder: " + deletedOrder)
+        return deletedOrder
+    } catch (err) {
+        throw new Error(err)
+    }
+}
+
+module.exports = { saveOrder, retrieveAllOrders, retrieveProductsFromOrder, retrieveOrderById, updateOrderStatus, destroyOrder }

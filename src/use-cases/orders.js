@@ -1,4 +1,4 @@
-const { saveOrder, retrieveAllOrders, retrieveProductsFromOrder, retrieveOrderById, updateOrderStatus } = require('../data-access/orders')
+const { saveOrder, retrieveAllOrders, retrieveProductsFromOrder, retrieveOrderById, updateOrderStatus, destroyOrder } = require('../data-access/orders')
 const { retrieveProductById } = require('../data-access/products')
 
 async function addOrder (data, userId) {
@@ -62,5 +62,19 @@ async function modifyOrderStatus (newStatus, orderId) {
     }
 }
 
+async function dropOrder (orderId) {
+    try {
+        const validation = await retrieveOrderById(orderId)
+        if (validation === null) {
+            return "La orden no existe"
+    } else {
+        const result = await destroyOrder(orderId)
+        return result
+        }
+    } catch (err) {
+        throw new Error(err)
+    }
+}
 
-module.exports = { addOrder, readAllOrders, readProductsFromOrder, modifyOrderStatus }
+
+module.exports = { addOrder, readAllOrders, readProductsFromOrder, modifyOrderStatus, dropOrder }

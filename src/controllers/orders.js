@@ -1,4 +1,4 @@
-const { addOrder, readAllOrders, readProductsFromOrder, modifyOrderStatus } = require('../use-cases/orders')
+const { addOrder, readAllOrders, readProductsFromOrder, modifyOrderStatus, dropOrder } = require('../use-cases/orders')
 
 async function postOrder (req, res) {
     try {
@@ -41,8 +41,22 @@ async function patchOrderStatus (req, res) {
         }
     } catch(err) {
         res.status(400)
-            .json( { response: err.message})
+            .json( { response: err.message } )
     }
 }
 
-module.exports = { postOrder, getAllOrders, getProductsFromOrder, patchOrderStatus }
+async function deleteOrder (req, res) {
+    try {
+        if (req.user.is_admin === true) {
+            await dropOrder(req.params.id)
+            res.json( { response: 'Order was deleted'})
+        } else {
+            throw {message: 'User is not admin'}
+        }
+    } catch(err) {
+        res.status(400)
+            .json( { response: err.message } )
+    }
+}
+
+module.exports = { postOrder, getAllOrders, getProductsFromOrder, patchOrderStatus, deleteOrder }
